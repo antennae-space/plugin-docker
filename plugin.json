@@ -1,8 +1,8 @@
 {
-  "$schema": "https://raw.githubusercontent.com/antennae-space/plugin-sdk/v1.6.0/plugin.schema.json",
+  "$schema": "https://raw.githubusercontent.com/antennae-space/plugin-sdk/v1.9.0/plugin.schema.json",
   "id": "docker",
   "name": "Docker",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "apiVersion": 1,
   "ide": ">=1.24.0 <2",
   "assets": "https://github.com/antennae-space/plugin-docker/releases/download/v{version}/docker-{arch}.tar.gz",

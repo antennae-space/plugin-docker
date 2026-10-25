@@ -94,5 +94,6 @@
   "unused": "sin usar",
   "{name} removed": "{name} eliminado",
   "{n} of {total} lines": "{n} de {total} líneas",
-  "{n}/{total} running": "{n}/{total} en ejecución"
+  "{n}/{total} running": "{n}/{total} en ejecución",
+  "Remove": "Eliminar"
 }

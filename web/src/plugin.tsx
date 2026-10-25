@@ -1,9 +1,8 @@
 // The Docker tool's door to the IDE: the sandbox API (`ide`) and the SDK's kit, under the names
 // its components use (api.rpc, t, contextMenu, prompt, confirm…). Its methods are docker.* of its
 // backend; nothing else of the IDE is reached.
-import { createSignal, type JSX, Show } from 'solid-js'
-import { render } from 'solid-js/web'
-import { Icon as KitIcon, EmptyState as KitEmpty, Modal, openMenu, confirm as kitConfirm, type IconName } from '@antennae-space/plugin-sdk/ui'
+import { createSignal, type JSX } from 'solid-js'
+import { Icon as KitIcon, EmptyState as KitEmpty, openMenu, type IconName } from '@antennae-space/plugin-sdk/ui'
 
 export const api = {
   rpc: <T = any>(method: string, params?: unknown) => ide.rpc<T>(`docker.${method}`, params),
@@ -57,33 +56,10 @@ export function contextMenu(e: MouseEvent, items: MenuItem[]) {
 export const toast = (text: string, kind?: 'info' | 'warn' | 'error' | 'ok') => ide.toast(text, kind)
 export const errorToast = (e: unknown) => ide.toast(e instanceof Error ? e.message : String(e), 'error')
 
-/** Asks yes or no (the frame has no native dialogs). */
-export const confirm = (text: string, danger = false) => kitConfirm({ title: t('Docker'), text, ok: t('OK'), cancel: t('Cancel'), danger })
+/** Asks yes or no in a dialog of the IDE, centered in its window. */
+export const confirm = (text: string, danger = false) => ide.confirm({ title: t('Docker'), text, ok: danger ? t('Remove') : t('OK'), danger })
 
-/** Asks a text: null when cancelled. */
-export function prompt(o: { title: string; label?: string }): Promise<string | null> {
-  return new Promise((resolve) => {
-    const host = document.createElement('div')
-    document.body.append(host)
-    const done = (v: string | null) => {
-      dispose()
-      host.remove()
-      resolve(v)
-    }
-    let input!: HTMLInputElement
-    const dispose = render(
-      () => (
-        <Modal title={o.title} onClose={() => done(null)} closeLabel={t('Cancel')}
-          footer={<><button class="btn" onClick={() => done(null)}>{t('Cancel')}</button><button class="btn primary" onClick={() => done(input.value)}>{t('OK')}</button></>}>
-          <div class="form">
-            <Show when={o.label}><label>{o.label}</label></Show>
-            <input ref={input} class="input" data-testid="docker-prompt" onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), done(input.value))} />
-          </div>
-        </Modal>
-      ),
-      host,
-    )
-  })
-}
+/** Asks a text in a dialog of the IDE: null when cancelled. */
+export const prompt = (o: { title: string; label?: string }): Promise<string | null> => ide.prompt(o)
 
 export type { JSX }
