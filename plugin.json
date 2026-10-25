@@ -1,0 +1,33 @@
+{
+  "$schema": "https://raw.githubusercontent.com/antennae-space/plugin-sdk/v1.6.0/plugin.schema.json",
+  "id": "docker",
+  "name": "Docker",
+  "version": "1.0.0",
+  "apiVersion": 1,
+  "ide": ">=1.24.0 <2",
+  "assets": "https://github.com/antennae-space/plugin-docker/releases/download/v{version}/docker-{arch}.tar.gz",
+  "backend": "bin/docker",
+  "permissions": ["socket:docker", "terminal", "files:read", "core:fs.read"],
+  "contributes": {
+    "tools": [{ "id": "docker", "label": "Docker", "icon": "docker", "zone": "bottomRight" }],
+    "assistantTools": ["docker_ps", "docker_logs"],
+    "toolSchemas": {
+      "docker_ps": {
+        "description": "State of the Docker Compose services of the project (Compose file at the project root): container, state, health, image, published ports. Without Compose file, lists every container of the host.",
+        "properties": {
+          "profiles": { "type": "array", "items": { "type": "string" }, "description": "Compose profiles to include (optional; by default those chosen in the Docker tool)" }
+        }
+      },
+      "docker_logs": {
+        "description": "Last lines of the logs of a Compose service of the project, or of any container (name or id), stdout and stderr together, with timestamps.",
+        "properties": {
+          "service": { "type": "string", "description": "Compose service of the project" },
+          "container": { "type": "string", "description": "Container name or id (instead of service)" },
+          "lines": { "type": "integer", "description": "Number of lines (200 by default, 2000 max)" },
+          "filter": { "type": "string", "description": "Keep only the lines containing this text (case-insensitive)" },
+          "profiles": { "type": "array", "items": { "type": "string" }, "description": "Compose profiles to include (optional; by default those chosen in the Docker tool)" }
+        }
+      }
+    }
+  }
+}

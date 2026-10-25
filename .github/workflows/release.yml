@@ -1,0 +1,26 @@
+# A tag v1.2.3 publishes the release of that version with its archives, one per architecture,
+# that the IDE downloads (the assets of plugin.json). Never move a tag once released: the IDE
+# locks the hash of an archive and refuses another one under the same version.
+name: release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - run: go vet ./... && go test ./...
+      - run: TAG=${{ github.ref_name }} ./scripts/pack.sh
+      - run: gh release create "${{ github.ref_name }}" dist/*.tar.gz --title "${{ github.ref_name }}" --notes "${{ github.ref_name }}"
+        env:
+          GH_TOKEN: ${{ github.token }}

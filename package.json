@@ -1,0 +1,16 @@
+{
+  "name": "plugin-docker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit && vite build",
+    "watch": "vite build --watch"
+  },
+  "devDependencies": {
+    "@antennae-space/plugin-sdk": "git+https://github.com/antennae-space/plugin-sdk.git#v1.6.0",
+    "solid-js": "^1.9.15",
+    "typescript": "^5.9.0",
+    "vite": "^8.0.0",
+    "vite-plugin-solid": "^2.11.0"
+  }
+}

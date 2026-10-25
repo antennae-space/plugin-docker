@@ -1,0 +1,20 @@
+# Each push: the page module typechecked and built, the backend vetted and tested.
+name: ci
+on:
+  push:
+    branches: ['**']
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - run: npm run build
+      - run: go vet ./... && go test ./...
